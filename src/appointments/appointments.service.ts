@@ -70,6 +70,8 @@ export class AppointmentsService {
     const appointmentsOnDate = await this.findAll({ date });
 
     const slots = [];
+    // interval is in ms while duration is in minutes, need multipy with 60 and 1000 on duration
+    // assume the next schedule/time starts immediately after previous schedule ends
     for (let i = 0; i < interval / (APPOINTMENT_DURATION * 60 * 1000); i++) {
       const time = startDateTime
         .plus({ minutes: APPOINTMENT_DURATION * i })
