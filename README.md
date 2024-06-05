@@ -1,73 +1,143 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# NEST-SCHEDULING-APP
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This is an application to create a scheduling or appointment
 
-## Installation
+## Tech stack
 
-```bash
-$ npm install
+* NestJS
+* MongoDB
+* Mongoose
+
+## How to use
+
+### Run Application
+
+Run the application in dev mode using this command
+
+```
+npm run start:dev
 ```
 
-## Running the app
+## Endpoints
+* [ GET /appointments/slots ](#get-appointments-slot)
+* [ GET /appointments ](#get-appointments)
+* [ POST /appointments ](#post-appointments)
+<br/>
 
-```bash
-# development
-$ npm run start
+### GET /appointments/slots
 
-# watch mode
-$ npm run start:dev
+This endpoint used to get available slot on certain date
 
-# production mode
-$ npm run start:prod
+#### Query Params
+
+| Field | Type | Required (Y/N) | Description |
+| ----- | ---- | -------------- | ----------- |
+| date | string | Y | must be in yyyy-mm-dd format |
+
+Example
+
+```
+{
+    "date": "2024-06-05"
+}
 ```
 
-## Test
+#### Response Body
 
-```bash
-# unit tests
-$ npm run test
+##### 200 OK
 
-# e2e tests
-$ npm run test:e2e
+Array of slot time that contains
+| Field | Type | Description |
+| ----- | ---- | -------------- |
+| date | string | date of slot|
+| time | string | time of slot|
+| available_slots | string | number of slots available at certain date and time|
 
-# test coverage
-$ npm run test:cov
+##### 400 BAD REQUEST
+
+| Field | Type | Description |
+| ----- | ---- | -------------- |
+| message | string | message of the operation |
+
+##### 500 INTERNAL SERVER ERROR
+
+| Field | Type | Description |
+| ----- | ---- | -------------- |
+| message | string | message of the operation |
+
+<br />
+
+### GET /appointments
+
+This endpoint used to get appointments
+
+
+#### Response Body
+
+##### 200 OK
+
+Array of appointments that contains
+| Field | Type | Description |
+| ----- | ---- | -------------- |
+| _id | string | id of appointment |
+| date | string | date of appointment |
+| time | string | time of appointment |
+
+##### 400 BAD REQUEST
+
+| Field | Type | Description |
+| ----- | ---- | -------------- |
+| message | string | message of the operation |
+
+##### 500 INTERNAL SERVER ERROR
+
+| Field | Type | Description |
+| ----- | ---- | -------------- |
+| message | string | message of the operation |
+
+<br />
+
+### POST /appointments
+
+This endpoint used to create a new appointment
+
+#### Body
+
+| Field | Type | Required (Y/N) | Description |
+| ----- | ---- | -------------- | ----------- |
+| date | string | Y | date of appointment (must be in yyyy-mm-dd format) |
+| time | string | Y | time of appointment (must be in HH:mm format) |
+
+Example
+
+```
+{
+    "date": "2024-06-20",
+    "time": "10:00"
+}
 ```
 
-## Support
+#### Response Body
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+##### 201 CREATED
 
-## Stay in touch
+| Field | Type | Description |
+| ----- | ---- | -------------- |
+| message | string | message of the operation |
+| appointment | appointment interface | contains appointment information (date, time) |
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+##### 400 BAD REQUEST
 
-## License
+| Field | Type | Description |
+| ----- | ---- | -------------- |
+| message | string | message of the operation |
 
-Nest is [MIT licensed](LICENSE).
+##### 500 INTERNAL SERVER ERROR
+
+| Field | Type | Description |
+| ----- | ---- | -------------- |
+| message | string | message of the operation |
+
+<br />
